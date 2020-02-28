@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:background="#00ffffff">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/middle_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent=".5" />
+
+    <TextView
+        android:id="@+id/calories_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="PROGRESS BARS"
+        android:textAlignment="center"
+        android:textColor="#363636"
+        android:textSize="30sp"
+        android:layout_marginBottom="50dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/progress_bar0" />
+
+    <TextView
+        android:id="@+id/calculator_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="31dp"
+        android:text="(by slaviboy)"
+        android:textAlignment="center"
+        android:textColor="#858585"
+        android:textSize="12sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/calories_label" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="100dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/button"
+        android:onClick="updatePercentage"
+        android:shadowColor="#2f6627"
+        android:shadowDx="0"
+        android:shadowDy="1"
+        android:shadowRadius="1"
+        android:text="Start"
+        android:textColor="#ffffff"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/progress_bar8" />
+
+    <com.slaviboy.progressbar.ProgressBar
+        android:id="@+id/progress_bar0"
+        style="@style/ProgressBar"
+        android:layout_marginBottom="10dp"
+        app:corner_radius="100dp"
+        app:layout_constraintBottom_toTopOf="@+id/progress_bar1"
+        app:percentage="10"
+        app:srcCompat="@drawable/purple_progress_bar"
+        tools:ignore="MissingConstraints" />
+
+    <com.slaviboy.progressbar.ProgressBar
+        android:id="@+id/progress_bar1"
+        style="@style/ProgressBar"
+        android:layout_marginBottom="10dp"
+        app:corner_radius="100dp"
+        app:layout_constraintBottom_toTopOf="@+id/progress_bar2"
+        app:percentage="20"
+        app:srcCompat="@drawable/blue_progress_bar"
+        tools:ignore="MissingConstraints" />
+
+    <com.slaviboy.progressbar.ProgressBar
+        android:id="@+id/progress_bar2"
+        style="@style/ProgressBar"
+        android:layout_marginBottom="10dp"
+        app:corner_radius="100dp"
+        app:layout_constraintBottom_toTopOf="@+id/progress_bar3"
+        app:percentage="30"
+        app:srcCompat="@drawable/green_progress_bar"
+        tools:ignore="MissingConstraints" />
+
+    <com.slaviboy.progressbar.ProgressBar
+        android:id="@+id/progress_bar3"
+        style="@style/ProgressBar"
+        android:layout_marginBottom="5dp"
+        app:corner_radius="100dp"
+        app:layout_constraintBottom_toTopOf="@+id/middle_guideline"
+        app:percentage="40"
+        app:srcCompat="@drawable/red_progress_bar"
+        tools:ignore="MissingConstraints" />
+
+    <com.slaviboy.progressbar.ProgressBar
+        android:id="@+id/progress_bar4"
+        style="@style/ProgressBar"
+        android:layout_marginTop="5dp"
+        app:corner_radius="100dp"
+        app:layout_constraintTop_toBottomOf="@+id/middle_guideline"
+        app:percentage="50"
+        app:srcCompat="@drawable/pink_progress_bar"
+        tools:ignore="MissingConstraints" />
+
+    <com.slaviboy.progressbar.ProgressBar
+        android:id="@+id/progress_bar5"
+        style="@style/ProgressBar"
+        android:layout_marginTop="10dp"
+        app:corner_radius="100dp"
+        app:layout_constraintTop_toBottomOf="@+id/progress_bar4"
+        app:percentage="60"
+        app:srcCompat="@drawable/yellow_progress_bar"
+        tools:ignore="MissingConstraints" />
+
+    <com.slaviboy.progressbar.ProgressBar
+        android:id="@+id/progress_bar6"
+        style="@style/ProgressBar"
+        android:layout_marginTop="10dp"
+        app:corner_radius="100dp"
+        app:layout_constraintTop_toBottomOf="@+id/progress_bar5"
+        app:percentage="70"
+        app:srcCompat="@drawable/light_green_progress_bar"
+        tools:ignore="MissingConstraints" />
+
+    <com.slaviboy.progressbar.ProgressBar
+        android:id="@+id/progress_bar7"
+        style="@style/ProgressBar"
+        android:layout_marginTop="10dp"
+        app:corner_radius="100dp"
+        app:layout_constraintTop_toBottomOf="@+id/progress_bar6"
+        app:percentage="80"
+        app:srcCompat="@drawable/black_progress_bar"
+        tools:ignore="MissingConstraints" />
+
+    <com.slaviboy.progressbar.ProgressBar
+        android:id="@+id/progress_bar8"
+        style="@style/ProgressBar"
+        android:layout_marginTop="10dp"
+        app:corner_radius="100dp"
+        app:layout_constraintTop_toBottomOf="@+id/progress_bar7"
+        app:percentage="90"
+        app:start_animation="true"
+        app:srcCompat="@drawable/orange_progress_bar"
+        tools:ignore="MissingConstraints" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
