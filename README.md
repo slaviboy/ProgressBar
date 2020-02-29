@@ -1,4 +1,4 @@
-# Progress Bar Andoird
+# Progress Bar Android
 Simple library for creating striped progress bars written in Kotlin
 
 ![cookie monster](https://github.com/slaviboy/ProgressBar/blob/master/screens/home.gif)
