@@ -6,6 +6,8 @@ import android.graphics.Path
 import android.graphics.RectF
 import android.graphics.drawable.Animatable
 import android.util.AttributeSet
+import android.util.DisplayMetrics
+import android.util.TypedValue
 import android.view.View
 import android.view.ViewTreeObserver
 
@@ -55,16 +57,103 @@ open class ProgressBar : androidx.appcompat.widget.AppCompatImageView {
         // set initial percentage
         percentage = attributes.getFloat(R.styleable.ProgressBar_percentage, 0.0f)
 
-        // set initial corner radii
-        val cornerRadius = attributes.getDimension(R.styleable.ProgressBar_corner_radius, 0.0f)
-        topLeftRadius = attributes.getDimension(R.styleable.ProgressBar_top_left_corner_radius, cornerRadius)
-        topRightRadius = attributes.getDimension(R.styleable.ProgressBar_top_right_corner_radius, cornerRadius)
-        bottomRightRadius = attributes.getDimension(R.styleable.ProgressBar_bottom_right_corner_radius, cornerRadius)
-        bottomLeftRadius = attributes.getDimension(R.styleable.ProgressBar_bottom_left_corner_radius, cornerRadius)
+        // get units as string, and after final measurement get the sizes in pixels
+        unitsString = arrayOf(
+            attributes.getString(R.styleable.ProgressBar_corner_radius) ?: "5px",
+            attributes.getString(R.styleable.ProgressBar_corner_radius_upper_left) ?: "0px",
+            attributes.getString(R.styleable.ProgressBar_corner_radius_upper_right) ?: "0px",
+            attributes.getString(R.styleable.ProgressBar_corner_radius_lower_left) ?: "0px",
+            attributes.getString(R.styleable.ProgressBar_corner_radius_lower_right) ?: "0px"
+        )
+
+        // get metrics used when converting dp and sp to px
+        displayMetrics = context.resources.displayMetrics
 
         // if stripe animation should auto start
         isStarted = attributes.getBoolean(R.styleable.ProgressBar_start_animation, false)
         attributes.recycle()
+    }
+
+
+    /**
+     * Get unit value in pixels, by passing unit string value, supported unit types are:
+     * dp, sp, px, vw(view width) and vh(view height)
+     * @param unitStr unit string
+     * @return unit value in pixels
+     */
+    protected fun getUnit(unitStr: String?): Float {
+        if (unitStr == null) {
+            return 0.0f
+        }
+
+        // get unit value
+        val value = unitStr
+            .substring(0, unitStr.length - 2)
+            .replace("[^0-9?!\\.]".toRegex(), "").toFloat()
+
+        // get unit type(last two characters) from the string
+        val unit = unitStr.substring(unitStr.length - 2)
+
+        // return the unit value as pixels
+        return when (unit) {
+            "dp" -> {
+                // dp to px
+                TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, value, displayMetrics)
+            }
+            "sp" -> {
+                // sp to px
+                TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, value, displayMetrics)
+            }
+            "px" -> {
+                value
+            }
+            "vw" -> {
+                // as percentage from view width (1.5 = 150%, 2 = 200% ...)
+                width * value
+            }
+            "vh" -> {
+                // as percentage from view height (1.5 = 150%, 2 = 200% ...)
+                height * value
+            }
+            else -> {
+                0.0f
+            }
+        }
+    }
+
+    /**
+     * Init attributes that need current width or height of tha view,
+     * and it is only possible after final measurement is made.
+     */
+    private fun initAfterMeasure() {
+
+        // xml corner radius attribute
+        val cornerRadiusAll = getUnit(unitsString[0])
+        var cornerRadiusUpperLeft = getUnit(unitsString[1])
+        var cornerRadiusUpperRight = getUnit(unitsString[2])
+        var cornerRadiusLowerLeft = getUnit(unitsString[3])
+        var cornerRadiusLowerRight = getUnit(unitsString[4])
+
+        // set corner radii for each corner
+        if (cornerRadiusUpperLeft == 0f) {
+            cornerRadiusUpperLeft = cornerRadiusAll
+        }
+        if (cornerRadiusUpperRight == 0f) {
+            cornerRadiusUpperRight = cornerRadiusAll
+        }
+        if (cornerRadiusLowerLeft == 0f) {
+            cornerRadiusLowerLeft = cornerRadiusAll
+        }
+        if (cornerRadiusLowerRight == 0f) {
+            cornerRadiusLowerRight = cornerRadiusAll
+        }
+
+        cornerRadii = floatArrayOf(
+            cornerRadiusUpperLeft, cornerRadiusUpperLeft,     // upper left radius in px
+            cornerRadiusUpperRight, cornerRadiusUpperRight,   // upper right radius in px
+            cornerRadiusLowerRight, cornerRadiusLowerRight,   // lower right radius in px
+            cornerRadiusLowerLeft, cornerRadiusLowerLeft      // lower left radius in px
+        )
     }
 
     // loading percentage
@@ -76,7 +165,7 @@ open class ProgressBar : androidx.appcompat.widget.AppCompatImageView {
             invalidate()
         }
 
-    var topLeftRadius: Float = 0.0f
+    var cornerRadiusUpperLeft: Float = 0.0f
         set(value) {
             require(value >= 0.0f) { "Top-Left radius must be positive!" }
             cornerRadii[0] = value
@@ -84,45 +173,47 @@ open class ProgressBar : androidx.appcompat.widget.AppCompatImageView {
             field = value
         }
 
-    var topRightRadius: Float = 0.0f
+    var cornerRadiusUpperRight: Float = 0.0f
         set(value) {
-            require(topRightRadius >= 0.0f) { "Top-Right radius must be positive!" }
+            require(value >= 0.0f) { "Top-Right radius must be positive!" }
             cornerRadii[2] = value
             cornerRadii[3] = value
             field = value
         }
 
-    var bottomRightRadius: Float = 0.0f
+    var cornerRadiusLowerLeft: Float = 0.0f
         set(value) {
-            require(bottomRightRadius >= 0.0f) { "Bottom-Right radius must be positive!" }
-            cornerRadii[4] = value
-            cornerRadii[5] = value
-            field = value
-        }
-
-    var bottomLeftRadius: Float = 0.0f
-        set(value) {
-            require(bottomLeftRadius >= 0.0f) { "Bottom-Left radius must be positive!" }
+            require(value >= 0.0f) { "Bottom-Left radius must be positive!" }
             cornerRadii[6] = value
             cornerRadii[7] = value
             field = value
         }
 
+    var cornerRadiusLowerRight: Float = 0.0f
+        set(value) {
+            require(value >= 0.0f) { "Bottom-Right radius must be positive!" }
+            cornerRadii[4] = value
+            cornerRadii[5] = value
+            field = value
+        }
+
     // corner radii as a float array
     private var cornerRadii: FloatArray = floatArrayOf(
-        0f, 0f,   // Top left radius in px
-        0f, 0f,   // Top right radius in px
-        0f, 0f,   // Bottom right radius in px
-        0f, 0f    // Bottom left radius in px
+        0f, 0f,   // upper left radius in px
+        0f, 0f,   // upper right radius in px
+        0f, 0f,   // lower right radius in px
+        0f, 0f    // lower left radius in px
     )
 
-    protected lateinit var clipPathBound: RectF        // the bound for the clip path
-    protected lateinit var backgroundPathBound: RectF  // the bound for the background path
-    protected lateinit var clipPath: Path              // path that will be used to clip the canvas
-    protected lateinit var backgroundPath: Path        // the whole path on 100% load, used to merge paths
-    protected lateinit var animatable: Animatable      // animatable object for the progressbar stripes
-    protected var isStarted: Boolean = false           // whether animation is started
-    protected var applyClipping: Boolean = true        // whether clipping should be applied
+    protected lateinit var clipPathBound: RectF             // the bound for the clip path
+    protected lateinit var backgroundPathBound: RectF       // the bound for the background path
+    protected lateinit var clipPath: Path                   // path that will be used to clip the canvas
+    protected lateinit var backgroundPath: Path             // the whole path on 100% load, used to merge paths
+    protected lateinit var animatable: Animatable           // animatable object for the progressbar stripes
+    protected var isStarted: Boolean = false                // whether animation is started
+    protected var applyClipping: Boolean = true             // whether clipping should be applied
+    protected lateinit var unitsString: Array<String>       // string array containing string unit values, from xml properties
+    protected lateinit var displayMetrics: DisplayMetrics   // used when getting the xml units as pixel, for - dp and sp conversions to px
 
     companion object {
 
@@ -144,7 +235,10 @@ open class ProgressBar : androidx.appcompat.widget.AppCompatImageView {
     }
 
     init {
+
+        // called when final measurement is made
         this.afterMeasured {
+            initAfterMeasure()
             onUpdate()
             initBackgroundPath()
 
@@ -219,7 +313,6 @@ open class ProgressBar : androidx.appcompat.widget.AppCompatImageView {
         }
         isStarted = false
     }
-
 
 
     override fun onDraw(canvas: Canvas?) {

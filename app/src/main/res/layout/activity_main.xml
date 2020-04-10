@@ -137,7 +137,7 @@
         app:srcCompat="@drawable/black_progress_bar"
         tools:ignore="MissingConstraints" />
 
-    <com.slaviboy.progressbar.ProgressBar
+    <com.slaviboy.progressbar.ProgressBarAntiAlias
         android:id="@+id/progress_bar8"
         style="@style/ProgressBar"
         android:layout_marginTop="10dp"
