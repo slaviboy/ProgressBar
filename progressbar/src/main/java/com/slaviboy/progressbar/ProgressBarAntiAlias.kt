@@ -1,25 +1,25 @@
+/*
+* Copyright (C) 2020 Stanislav Georgiev
+* https://github.com/slaviboy
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+*      http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*/
 package com.slaviboy.progressbar
 
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
-
-// Copyright (C) 2020 Stanislav Georgiev
-//  https://github.com/slaviboy
-//
-//	This program is free software: you can redistribute it and/or modify
-//	it under the terms of the GNU Affero General Public License as
-//	published by the Free Software Foundation, either version 3 of the
-//	License, or (at your option) any later version.
-//
-//	This program is distributed in the hope that it will be useful,
-//	but WITHOUT ANY WARRANTY; without even the implied warranty of
-//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//	GNU Affero General Public License for more details.
-//
-//	You should have received a copy of the GNU Affero General Public License
-//	along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+ 
 /**
  * Simple Progress Bar class that uses vector and animation, the properties
  * like animation speed and progress bar color are set using the xml files.
@@ -39,14 +39,14 @@ class ProgressBarAntiAlias : ProgressBar {
         defStyleAttr
     )
 
-    private lateinit var backgroundCanvas: Canvas   // canvas for getting the animated background
-    private lateinit var backgroundBitmap: Bitmap   // bitmap attached to the background canvas
-    private lateinit var clipCanvas: Canvas         // canvas for drawing the clip path
-    private lateinit var clipBitmap: Bitmap         // bitmap attached to the clip canvas
-    private lateinit var renderCanvas: Canvas       // canvas to clip the background from the clip bitmap, using PorterDuffXfermode
-    private lateinit var renderBitmap: Bitmap       // bitmap attached to the render canvas
-    private var xfermode = PorterDuffXfermode(PorterDuff.Mode.DST_IN)
-    private var paint: Paint = Paint().apply {
+    internal lateinit var backgroundCanvas: Canvas   // canvas for getting the animated background
+    internal lateinit var backgroundBitmap: Bitmap   // bitmap attached to the background canvas
+    internal lateinit var clipCanvas: Canvas         // canvas for drawing the clip path
+    internal lateinit var clipBitmap: Bitmap         // bitmap attached to the clip canvas
+    internal lateinit var renderCanvas: Canvas       // canvas to clip the background from the clip bitmap, using PorterDuffXfermode
+    internal lateinit var renderBitmap: Bitmap       // bitmap attached to the render canvas
+    internal var xfermode = PorterDuffXfermode(PorterDuff.Mode.DST_IN)
+    internal var paint: Paint = Paint().apply {
         isAntiAlias = true
     }
 
@@ -69,7 +69,7 @@ class ProgressBarAntiAlias : ProgressBar {
         }
     }
 
-    override fun onDraw(canvas: Canvas?) {
+    override fun onDraw(canvas: Canvas) {
 
         // draw the animated background
         super.onDraw(backgroundCanvas)
@@ -88,7 +88,7 @@ class ProgressBarAntiAlias : ProgressBar {
         paint.xfermode = null
 
         // draw bitmap with the clipped path
-        canvas?.apply {
+        canvas.apply {
             drawBitmap(renderBitmap, 0.0f, 0.0f, paint)
         }
 
